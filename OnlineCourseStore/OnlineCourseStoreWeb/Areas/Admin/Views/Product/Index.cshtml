@@ -1,0 +1,71 @@
+﻿@model List<Product>
+
+<div class="card shadow border-0 mt-4 mb-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Product List</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <div class="row pb-3">
+            <div class="col-6"></div>
+            <div class="col-6 text-end">
+                <a asp-controller="Product" asp-action="Upsert" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Create New Product
+                </a>
+            </div>
+        </div>
+
+        <table id="tblData" class="table table-bordered table-striped" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Title</th>                  <!-- Corresponds to Product.Title -->
+                    <th>Description</th>             <!-- Corresponds to Product.Description -->
+                    <th>Instructor Name</th>        <!-- Corresponds to Product.Instructor -->
+                    <th>Duration (Hours)</th>        <!-- Corresponds to Product.Duration -->
+                    <th>Standard Price</th>         <!-- Corresponds to Product.StandardPrice -->
+                    <th>Discount Price (1 - 50)</th> <!-- Corresponds to Product.Price -->
+                    <th>Actions</th>                <!-- Action buttons for editing and deleting products -->
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model == null || !Model.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="text-center">No Products Available</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var product in Model)
+                    {
+                        <tr>
+                            <td>@product.Title</td>
+                            <td>@product.Description</td>
+                            <td>@product.Instructor</td>
+                            <td>@product.Duration</td>
+                            <td>@product.StandardPrice.ToString("C")</td> <!-- Format as currency -->
+                            <td>@product.Price.ToString("C")</td> <!-- Format as currency -->
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-controller="Product" asp-action="Upsert" asp-route-id="@product.Id" class="btn btn-primary mx-1" title="Edit Product">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <a asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger mx-1" title="Delete Product" onclick="return confirm('Are you sure you want to delete this product?');">
+                                        <i class="bi bi-trash-fill"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/product.js"></script>
+}
